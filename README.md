@@ -55,6 +55,7 @@ pip install -r requirements.txt
 ---
 
 ## ▶ Usage
+The results will be shown in terminal
 Run the script:
 ```bash
 python scraper.py
