@@ -8,8 +8,7 @@ from urllib.parse import quote
 from selenium.common.exceptions import TimeoutException
 
 
-
-class JobScraper:
+class Job_Listing_Scraper:
     def __init__(self, job_title, results_num=10):
         self.driver = webdriver.Chrome()
         self.job_title = job_title
@@ -66,7 +65,7 @@ class JobScraper:
             return 
 
         safe_title = "_".join(self.job_title.strip().lower().split())
-        filename = f"jobs_{safe_title}.csv"
+        filename = f"results/jobs_{safe_title}.csv"
 
         dataframe = pd.DataFrame(self.results)
         dataframe.to_csv(filename, index=False)
@@ -74,7 +73,8 @@ class JobScraper:
 
     def quit(self): 
         self.driver.quit()
-
+        
+        
 
 job_title = input("🥸  Enter the job title: ")
 
@@ -89,7 +89,7 @@ while True:
     except ValueError:
         print("☹️  Please enter a valid number.")
 
-scraper = JobScraper(job_title, results_num)
+scraper = Job_Listing_Scraper(job_title, results_num)
 scraper.search_jobs()
 scraper.extract_data()
 scraper.save_data()
