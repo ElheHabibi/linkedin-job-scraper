@@ -4,24 +4,31 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import pandas as pd
+from urllib.parse import quote
+from selenium.common.exceptions import TimeoutException
+
 
 
 class JobScraper:
-    def __init__(self, job_title, results_num):
+    def __init__(self, job_title, results_num=10):
         self.driver = webdriver.Chrome()
         self.job_title = job_title
-        self.num_results = results_num
+        self.results_num = results_num  
         self.results = []
 
     def search_jobs(self):
-        self.driver.get(f"https://www.linkedin.com/jobs/search/?keywords={job_title}")
+        self.driver.get(f"https://www.linkedin.com/jobs/search/?keywords={quote(self.job_title)}")
 
-        WebDriverWait(self.driver, 15).until(EC.presence_of_element_located((By.CLASS_NAME, 'base-card')))
+        try:
+            WebDriverWait(self.driver, 15).until(EC.presence_of_element_located((By.CLASS_NAME, 'base-card')))
+        except TimeoutException:
+            print("☹️  No jobs found for this title.")
+            return
 
         for i in range(5):
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(2)
-            
+
 
     def extract_data(self):
         cards = self.driver.find_elements(By.CLASS_NAME, 'base-card')[:self.results_num]
@@ -47,9 +54,15 @@ class JobScraper:
             except:
                 link = "not found"
 
-    def save_data(self, filename):
+            self.results.append({
+                "Job Title": job,
+                "Company": company,
+                "Location": location,
+                "Link": link
+            })
+
+    def save_data(self, filename=None):
         if not self.results: 
-            print("☹️  No jobs found for this title.")
             return 
 
         safe_title = "_".join(self.job_title.strip().lower().split())
@@ -59,26 +72,32 @@ class JobScraper:
         dataframe.to_csv(filename, index=False)
         print(f"\n😍  Jobs are saved in {filename}")
 
+    def quit(self): 
+        self.driver.quit()
+
 
 job_title = input("🥸  Enter the job title: ")
-input_num = input("🥸  How many results do you want? ")
 
-try:
-    results_num = int(input_num)
-    if results_num <= 0:
-        raise ValueError
-except ValueError:
-    raise SystemExit("☹️  Please enter a valid positive number.")
+while True:
+    input_num = input("🥸  How many results do you want? ")
+    try:
+        results_num = int(input_num)
+        if results_num <= 0:
+            print("☹️  Please enter a valid positive number.")
+            continue
+        break  
+    except ValueError:
+        print("☹️  Please enter a valid number.")
 
 scraper = JobScraper(job_title, results_num)
 scraper.search_jobs()
 scraper.extract_data()
 scraper.save_data()
-scraper.close()
-
+scraper.quit()
         
-                
-                
+        
+###################################################
+# linear job scraper code:
                 
 
 # job_title = input("🥸  Enter the job title: ")
