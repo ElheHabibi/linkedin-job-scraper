@@ -27,6 +27,8 @@ class Job_Listing_Scraper:
         for i in range(5):
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(2)
+            
+        return True
 
 
     def extract_data(self):
@@ -59,6 +61,7 @@ class Job_Listing_Scraper:
                 "Location": location,
                 "Link": link
             })
+        return True 
 
     def save_data(self, filename=None):
         if not self.results: 
@@ -74,26 +77,74 @@ class Job_Listing_Scraper:
     def quit(self): 
         self.driver.quit()
         
+    
+while True:
+    job_title = input("🥸  Enter the job title: ")
+
+    while True:
+        input_num = input("🥸  How many results do you want? ")
+        try:
+            results_num = int(input_num)
+            if results_num <= 0:
+                print("☹️  Please enter a valid positive number.")
+                continue
+            break
+        except ValueError:
+            print("☹️  Please enter a valid number.")
+
+    scraper = Job_Listing_Scraper(job_title, results_num)
+    found = scraper.search_jobs()
+
+    if not found:
+        scraper.quit()
+        choice = input("💎  Do you want to try a different job title? (y/n): ").lower()
+        if choice == "y":
+            continue
+        else:
+            print("Exiting program...")
+            break
+
+    data_extracted = scraper.extract_data()
+
+    if not data_extracted:
+        scraper.quit()
+        choice = input("☹️  No jobs found. Try another job title? (y/n): ").lower()
+        if choice == "y":
+            continue
+        else:
+            print("Exiting program...")
+            break
+
+    scraper.save_data()
+    scraper.quit()
+
+    choice = input("💎  Do you want to search for another job title? (y/n): ").lower()
+    if choice != "y":
+        print("Exiting program...")
+        break       
+        
+        
+        
         
 
-job_title = input("🥸  Enter the job title: ")
+# job_title = input("🥸  Enter the job title: ")
 
-while True:
-    input_num = input("🥸  How many results do you want? ")
-    try:
-        results_num = int(input_num)
-        if results_num <= 0:
-            print("☹️  Please enter a valid positive number.")
-            continue
-        break  
-    except ValueError:
-        print("☹️  Please enter a valid number.")
+# while True:
+#     input_num = input("🥸  How many results do you want? ")
+#     try:
+#         results_num = int(input_num)
+#         if results_num <= 0:
+#             print("☹️  Please enter a valid positive number.")
+#             continue
+#         break  
+#     except ValueError:
+#         print("☹️  Please enter a valid number.")
 
-scraper = Job_Listing_Scraper(job_title, results_num)
-scraper.search_jobs()
-scraper.extract_data()
-scraper.save_data()
-scraper.quit()
+# scraper = Job_Listing_Scraper(job_title, results_num)
+# scraper.search_jobs()
+# scraper.extract_data()
+# scraper.save_data()
+# scraper.quit()
         
         
 ###################################################
