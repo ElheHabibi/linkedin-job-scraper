@@ -81,6 +81,9 @@ class Job_Listing_Scraper:
         dataframe = pd.DataFrame(self.results)
         dataframe.to_csv(filename, index=False)
         print(f"\n😍  Jobs are saved in {filename}")
+    
+    def quit(self):
+        self.driver.quit()
         
         
 def get_job_title():
@@ -108,6 +111,8 @@ def get_results_num():
             return num
         except ValueError:
             print("☹️  Please enter a valid number.")
+            
+
 
 
 while True:
