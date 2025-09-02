@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import pandas as pd
 from selenium.common.exceptions import TimeoutException
+import os
 
 
 class Job_Listing_Scraper:
@@ -69,14 +70,17 @@ class Job_Listing_Scraper:
             return 
 
         safe_title = "_".join(self.job_title.strip().split())
-        filename = f"results/jobs_{safe_title}.csv"
+        base_filename = f"results/jobs_{safe_title}.csv"
+        filename = base_filename
+
+        count = 1
+        while os.path.exists(filename):
+            filename = f"results/jobs_{safe_title}_{count}.csv"
+            count += 1
 
         dataframe = pd.DataFrame(self.results)
         dataframe.to_csv(filename, index=False)
         print(f"\n😍  Jobs are saved in {filename}")
-
-    def quit(self): 
-        self.driver.quit()
         
         
 def get_job_title():
