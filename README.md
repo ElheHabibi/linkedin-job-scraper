@@ -91,5 +91,3 @@ LINKEDIN-JOB-SCRAPER
 - Filter by experience level (Entry, Mid, Senior)  
 - Store results in an SQLite database instead of CSV  
 - Add a simple web interface using **Streamlit**  
-
----
