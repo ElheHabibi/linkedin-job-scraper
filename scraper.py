@@ -4,7 +4,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import pandas as pd
-from urllib.parse import quote
 from selenium.common.exceptions import TimeoutException
 
 
@@ -16,7 +15,7 @@ class Job_Listing_Scraper:
         self.results = []
 
     def search_jobs(self):
-        self.driver.get(f"https://www.linkedin.com/jobs/search/?keywords={quote(self.job_title)}")
+        self.driver.get(f"https://www.linkedin.com/jobs/search/?keywords={self.job_title}")
 
         try:
             WebDriverWait(self.driver, 15).until(EC.presence_of_element_located((By.CLASS_NAME, 'base-card')))
@@ -79,43 +78,57 @@ class Job_Listing_Scraper:
     def quit(self): 
         self.driver.quit()
         
-    
-while True:
-    job_title = input("🥸  Enter the job title: ")
-
+        
+def get_job_title():
     while True:
-        input_num = input("🥸  How many results do you want? ")
+        title = input("🥸  Enter the job title (or type 'exit' to quit): ").strip()
+        if not title:
+            print("☹️  Job title can not be empty.")
+            continue
+        if title.lower() == "exit":
+            return None
+        return title
+
+def get_results_num():
+    while True:
+        input_num = input("🥸  How many results do you want? (type 'back' to change job title, 'exit' to quit): ")
+        if input_num.lower() == "back":
+            return "back"
+        if input_num.lower() == "exit":
+            return None
         try:
-            results_num = int(input_num)
-            if results_num <= 0:
+            num = int(input_num)
+            if num <= 0:
                 print("☹️  Please enter a valid positive number.")
                 continue
-            break
+            return num
         except ValueError:
             print("☹️  Please enter a valid number.")
 
+
+while True:
+    job_title = get_job_title()
+    if job_title is None:
+        print("Exiting program...")
+        break
+
+    results_num = get_results_num()
+    if results_num == "back":
+        continue 
+    if results_num is None:
+        print("Exiting program...")
+        break
+
     scraper = Job_Listing_Scraper(job_title, results_num)
-    found = scraper.search_jobs()
 
-    if not found:
+    if not scraper.search_jobs():
         scraper.quit()
-        choice = input("💎  Do you want to try a different job title? (y/n): ").lower()
-        if choice == "y":
-            continue
-        else:
-            print("Exiting program...")
-            break
+        continue
 
-    data_extracted = scraper.extract_data()
-
-    if not data_extracted:
+    if not scraper.extract_data():
+        print("☹️  No jobs extracted.")
         scraper.quit()
-        choice = input("☹️  No jobs found. Try another job title? (y/n): ").lower()
-        if choice == "y":
-            continue
-        else:
-            print("Exiting program...")
-            break
+        continue
 
     scraper.save_data()
     scraper.quit()
@@ -123,7 +136,10 @@ while True:
     choice = input("💎  Do you want to search for another job title? (y/n): ").lower()
     if choice != "y":
         print("Exiting program...")
-        break       
+        break
+        
+    
+
         
         
 
