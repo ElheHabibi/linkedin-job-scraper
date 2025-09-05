@@ -28,15 +28,15 @@ You can search for a job title, choose how many results you want, and download t
 
 ---
 
-⚙️ Installation & Setup
+## ⚙️ Installation & Setup
 
-### 1. Clone the repository
+1. Clone the repository
 ```bash
 git clone https://github.com/ElheHabibi/linkedin-job-scraper.git
 cd linkedin-job-scraper
 ```
 
-### 2. Install dependencies
+2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
@@ -48,7 +48,7 @@ streamlit run scraper.py
 ```
 ---
 
-## 🫴 Demo
+## 👀 Demo
 
 ### Input
 Enter job title and number of results, then click **Search Jobs**:
