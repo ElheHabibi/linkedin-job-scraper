@@ -1,8 +1,7 @@
 # LinkedIn Job Scraper
 
-## 📄 Overview
-This project is a **simple web scraper built with Python and Selenium** that allows users to search for job titles on **LinkedIn** and extract information about job opportunities (such as job title, company, location, and job link).  
-The results are saved in a CSV file.
+A simple tool to scrape job listings from LinkedIn using **Selenium** and a **Streamlit UI**.  
+You can search for a job title, choose how many results you want, and download the results as a CSV file.
 
 ---
 
@@ -13,81 +12,57 @@ The results are saved in a CSV file.
   - Company Name  
   - Location  
   - Direct Job Link  
-- Save results into a CSV file  
-- Object-Oriented (OOP) design for clean and maintainable code  
+- Choose number of results
+- View results in a table
+- Download jobs as CSV
+- Simple and clean UI with Streamlit
 
 ---
 
 ## 🛠 Requirements
-1. **Python 3.8+**  
-2. **Selenium** → for browser automation  
-3. **ChromeDriver** → to connect Selenium with Chrome  
-4. **pandas** → for saving results into CSV  
+- Python 3.8+
+- Selenium
+- pandas
+- webdriver-manager
+- streamlit
 
 ---
 
-## ⚙️ Installation & Setup
+⚙️ Installation & Setup
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/linkedin-job-scraper.git
+git clone https://github.com/ElheHabibi/linkedin-job-scraper.git
 cd linkedin-job-scraper
 ```
 
-### 2. Create a virtual environment (optional but recommended)
-```bash
-python -m venv .venv
-source .venv/bin/activate   # On Windows: .venv\Scripts\activate
-```
-
-### 3. Install dependencies
+### 2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
-
-### 4. Install ChromeDriver
-- Check your Chrome version:  
-  **Help → About Chrome**  
-- Download the matching ChromeDriver version from the official site:  
-  🔗 https://sites.google.com/chromium.org/driver/  
-- Extract the file and place it inside the `chromedriver-win64` folder.
-
 ---
 
-## ▶ Usage
-The results will be shown in terminal
-Run the script:
+## ▶ Run
 ```bash
-python scraper.py
+streamlit run scraper.py
 ```
+---
 
-Then:  
-1. Enter the job title (e.g., `Data Scientist`)  
-2. Enter the number of results you want (e.g., `10`)  
-3. The scraper will extract the jobs and save them automatically in:  
+## 🫴 Demo
 
-```
-results/jobs_<job_title>.csv
-```
+### Input
+Enter job title and number of results, then click **Search Jobs**:
+
+![Job Scraper Input](./images/shot-scraper-1.png)
+
+### Output
+Results will be shown in a table, and you can download them as a CSV:
+
+![Job Scraper Output](./images/shot-scraper-2.png)
 
 ---
 
-## 📂 Project Structure
-```bash
-LINKEDIN-JOB-SCRAPER
-├── .venv/                  
-├── chromedriver-win64/    
-├── results/                
-├── .gitignore
-├── README.md            
-├── requirements.txt        
-└── scraper.py       
-```
-
----
-
-## 💡 Possible Improvements
-- Filter jobs by location (e.g., Tehran or Remote)  
-- Filter by experience level (Entry, Mid, Senior)  
-- Store results in an SQLite database instead of CSV  
-- Add a simple web interface using **Streamlit**  
+## 📝 Notes
+- ChromeDriver is automatically downloaded and managed by `webdriver_manager`.
+- LinkedIn may occasionally impose restrictions or CAPTCHAs.
+- **Important for users in Iran:** Due to restrictions, downloading ChromeDriver may require a VPN/proxy.
